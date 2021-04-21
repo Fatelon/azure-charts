@@ -1,0 +1,19 @@
+<mat-radio-group
+  aria-label="Select a type"
+  [value]="initalChartType"
+  (change)="onChangedChartType($event)"
+>
+  <mat-radio-button value="line">Line</mat-radio-button>
+  <mat-radio-button value="column">Column</mat-radio-button>
+  <mat-radio-button value="bar">Bar</mat-radio-button>
+</mat-radio-group>
+
+<div>
+  <mat-label>Enter a date range</mat-label>
+  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+    <input matStartDate formControlName="start" placeholder="Start date">
+    <input matEndDate formControlName="end" placeholder="End date">
+  </mat-date-range-input>
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+</div>

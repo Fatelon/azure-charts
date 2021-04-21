@@ -1,0 +1,18 @@
+<div *ngIf="(chartsDataset$ | async)?.length > 0; else elseBlock">
+  <highcharts-chart
+    [Highcharts]="Highcharts"
+    [constructorType]="chartConstructor"
+    [options]="chartOptions"
+    [callbackFunction]="chartCallback"
+    [(update)]="updateFlag"
+    [oneToOne]="oneToOneFlag"
+    style="width: 100%; height: 600px; display: block;"
+  ></highcharts-chart>
+
+  <app-settings-box
+    [initalChartType]="initalChartType"
+    (changedChartType)="onChangedChartType($event)"
+  ></app-settings-box>
+</div>
+
+<ng-template #elseBlock>No content for the chart!!</ng-template>
