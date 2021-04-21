@@ -1,22 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import * as Highcharts from 'highcharts';
 import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IChartData, IChartDateInterval } from '../app.entity';
 import { CHARTS_DATASET } from './simple-chart.daraset';
-import { IChartData } from './simple-chart.entity';
 
 @Component({
   selector: 'app-simple-chart',
   templateUrl: './simple-chart.component.html',
   styleUrls: ['./simple-chart.component.scss'],
-	// changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SimpleChartComponent implements OnInit, OnDestroy {
 
   private readonly destroy$ = new Subject();
 
-  chartsDataset$: Observable<IChartData[]> = of(CHARTS_DATASET);
+  readonly chartsDataset = (CHARTS_DATASET as Array<IChartData>).reverse(); // reverse !!!
+  chartsDataset$: Observable<Array<IChartData>> = of(this.chartsDataset);
+  dateInterval: { start: Date, end: Date };
+  currentDataIndex: number;
 
   Highcharts: typeof Highcharts = Highcharts;
   chartConstructor = 'chart';
@@ -36,12 +39,25 @@ export class SimpleChartComponent implements OnInit, OnDestroy {
           text: 'Build time (minutes)'
       }
     },
+    plotOptions: {
+      series: {
+        point: {
+          events: {
+            mouseOver: (event) => {
+              console.log('Current data is', this.chartsDataset[event.target['index']]);
+              this.currentDataIndex = event.target['index'];
+              this.changeDetectorRef.detectChanges();
+            }
+          }
+        }
+      }
+    }
     // legend: {
 
     // }
   };
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.initChart();
   }
 
@@ -51,17 +67,28 @@ export class SimpleChartComponent implements OnInit, OnDestroy {
   initChart() {
     this.chartOptions.xAxis = { type: 'datetime' };
     this.chartsDataset$.pipe(takeUntil(this.destroy$))
-      // tslint:disable-next-line: deprecation
       .subscribe((chartsDataset: IChartData[]) => {
         this.chartOptions.series = this.getSeries(chartsDataset);
+        this.dateInterval = {
+          start: new Date(chartsDataset[0].startTime),
+          end: new Date(chartsDataset[chartsDataset.length - 1].startTime)
+        };
       });
   }
 
   chartCallback: Highcharts.ChartCallbackFunction = (chart) => {};
 
   onChangedChartType(newType: string) {
-    console.log('newType', newType);
     this.chartOptions.chart.type = newType;
+    this.updateFlag = true;
+  }
+
+  onChangedInterval(newInterval: IChartDateInterval) {
+    this.chartOptions.xAxis = {
+      type: 'datetime',
+      min: newInterval.start.valueOf(),
+      max: newInterval.end.valueOf()
+    };
     this.updateFlag = true;
   }
 
@@ -81,8 +108,7 @@ export class SimpleChartComponent implements OnInit, OnDestroy {
           moment(data.startTime).valueOf(),
           this.getMinutesDuration(data)
         ]
-      ))
-      .reverse();
+      ));
   }
 
   private readonly getMinutesDuration = (data: any): number => {

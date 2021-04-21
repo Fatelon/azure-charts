@@ -11,7 +11,10 @@
 
   <app-settings-box
     [initalChartType]="initalChartType"
+    [dateInterval]="dateInterval"
+    [currentData]="(chartsDataset$ | async)[currentDataIndex]"
     (changedChartType)="onChangedChartType($event)"
+    (changedInterval)="onChangedInterval($event)"
   ></app-settings-box>
 </div>
 

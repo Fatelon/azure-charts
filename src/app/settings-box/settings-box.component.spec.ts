@@ -1,7 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SettingsBoxComponent } from './settings-box.component';
 
@@ -9,7 +7,7 @@ describe('SettingsBoxComponent', () => {
   let component: SettingsBoxComponent;
   let fixture: ComponentFixture<SettingsBoxComponent>;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       declarations: [ SettingsBoxComponent ]
     })
