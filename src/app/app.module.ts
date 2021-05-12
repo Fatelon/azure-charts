@@ -12,20 +12,27 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TechInfoComponent } from './tech-info/tech-info.component';
+import { BuildFailChartComponent } from './build-fail-chart/build-fail-chart.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 const materialModules = [
   MatRadioModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatFormFieldModule
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule
 ];
 
 @NgModule({
-  declarations: [	
+  declarations: [
     AppComponent,
     SimpleChartComponent,
     SettingsBoxComponent,
-      TechInfoComponent
+      TechInfoComponent,
+      BuildFailChartComponent
    ],
   imports: [
     BrowserModule,
@@ -33,7 +40,8 @@ const materialModules = [
     FormsModule,
     ReactiveFormsModule,
     materialModules,
-    HighchartsChartModule
+    HighchartsChartModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,13 +4,13 @@ import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IChartData, IChartDateInterval } from '../app.entity';
-import { CHARTS_DATASET } from './simple-chart.daraset';
+import { CHARTS_DATASET } from './simple-chart.dataset';
 
 @Component({
   selector: 'app-simple-chart',
   templateUrl: './simple-chart.component.html',
   styleUrls: ['./simple-chart.component.scss'],
-	changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SimpleChartComponent implements OnInit, OnDestroy {
 
@@ -57,7 +57,7 @@ export class SimpleChartComponent implements OnInit, OnDestroy {
     // }
   };
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
     this.initChart();
   }
 
